@@ -15,7 +15,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     # ★ .devcontainer/Dockerfile と同じイメージ・同じタグにすること（ここがずれると CI だけ落ちる）
-    container: ghcr.io/norak29/texlive-ja:2026.11.23
+    container: ghcr.io/norak29/texlive-ja:2026.11.24
     steps:
       - uses: actions/checkout@v4
 

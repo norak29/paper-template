@@ -2,7 +2,7 @@
 #
 # ★ 新しいプロジェクトを始めたら、タグが古くないか確認すること
 #    最新タグ: https://github.com/norak29/texlive-ja/pkgs/container/texlive-ja
-FROM ghcr.io/norak29/texlive-ja:2026.11.23
+FROM ghcr.io/norak29/texlive-ja:2026.11.24
 
 # --- 緊急避難用の追加枠 -------------------------------------------
 # 締切前に「このパッケージが無い」と気づいたときは、ここに足して
