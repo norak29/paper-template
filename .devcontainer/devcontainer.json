@@ -48,7 +48,7 @@
         "latex-workshop.latex.autoClean.run": "never",
 
         "latex-workshop.view.pdf.viewer": "tab",
-        "latex-workshop.view.pdf.invertMode.enabled": "auto",
+        "latex-workshop.view.pdf.invertMode.enabled": "never",
         "latex-workshop.synctex.afterBuild.enabled": true,
         "latex-workshop.intellisense.package.enabled": true,
 
