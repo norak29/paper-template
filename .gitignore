@@ -1,0 +1,30 @@
+# LaTeX 中間ファイル
+out/
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.lof
+*.log
+*.lot
+*.out
+*.synctex.gz
+*.synctex(busy)
+*.toc
+*.nav
+*.snm
+*.vrb
+*.bcf
+*.run.xml
+*.xdv
+
+# PDF は履歴に入れたくなければコメントを外す
+# *.pdf
+
+# OS / エディタ
+Thumbs.db
+desktop.ini
+.DS_Store
+*~

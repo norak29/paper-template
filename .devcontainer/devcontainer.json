@@ -1,0 +1,60 @@
+{
+  // ★ プロジェクト名に変える（VSCode のウィンドウ表示に使われるだけ）
+  "name": "paper",
+
+  "build": { "dockerfile": "Dockerfile" },
+
+  // workspaceFolder は書かないこと。
+  // 既定で手元のフォルダが /workspaces/<フォルダ名> にマウントされる。
+  // 指定すると空のディレクトリを開いてしまう。
+  "remoteUser": "root",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "James-Yu.latex-workshop",
+        "tecosaur.latex-utilities",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        // ビルドはリポジトリ直下の .latexmkrc に任せる
+        "latex-workshop.latex.tools": [
+          {
+            "name": "latexmk",
+            "command": "latexmk",
+            "args": ["-outdir=%OUTDIR%", "%DOC%"],
+            "env": {}
+          }
+        ],
+        "latex-workshop.latex.recipes": [
+          { "name": "latexmk (.latexmkrc)", "tools": ["latexmk"] }
+        ],
+
+        "latex-workshop.latex.outDir": "%DIR%/out",
+
+        // 保存するたびに組版。打つそばから組みたければ "onFileChange"
+        "latex-workshop.latex.autoBuild.run": "onSave",
+        "latex-workshop.latex.autoClean.run": "never",
+
+        "latex-workshop.view.pdf.viewer": "tab",
+        "latex-workshop.view.pdf.invertMode.enabled": "auto",
+        "latex-workshop.synctex.afterBuild.enabled": true,
+        "latex-workshop.intellisense.package.enabled": true,
+
+        "[latex]": {
+          "editor.wordWrap": "on",
+          "editor.tabSize": 2,
+          "editor.unicodeHighlight.ambiguousCharacters": false
+        },
+        "[bibtex]": { "editor.tabSize": 2 },
+
+        "files.encoding": "utf8",
+        "files.eol": "\n",
+        "files.insertFinalNewline": true,
+
+        "git.autofetch": true,
+        "git.enableSmartCommit": false
+      }
+    }
+  }
+}

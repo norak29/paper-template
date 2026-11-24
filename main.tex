@@ -1,0 +1,44 @@
+% upLaTeX + dvipdfmx でビルドする（.latexmkrc で指定済み）
+% 学会スタイルを使う場合は sty/ に置き、下の documentclass と usepackage を差し替える
+\documentclass[a4paper,10pt]{jsarticle}
+
+% --- 学会スタイル（sty/ に置いたものを読む）------------------------
+% \usepackage{IEEJ2026}
+
+% --- よく使うもの --------------------------------------------------
+\usepackage[dvipdfmx]{graphicx}
+\usepackage{amsmath}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{makecell}
+\usepackage{float}
+\usepackage[dvipdfmx]{hyperref}
+
+% enumerate を (1), (2), ... の形式にする
+\setlist[enumerate, 1]{label=(\arabic*), itemsep=0pt, parsep=0pt, topsep=0pt}
+
+\bibliographystyle{unsrt}
+
+% --- 文書情報 ------------------------------------------------------
+\title{タイトル}
+\author{著者名}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{はじめに}
+ここから書く。
+
+% 1文ごとに改行すると、Git の差分が読みやすくなる。
+% 段落を1行で書くと、単語1つの修正が段落全体の変更として記録される。
+
+\section{まとめ}
+
+% --- 参考文献 ------------------------------------------------------
+% cite.bib に文献情報を書き、本文から \cite{キー} で参照する。
+% 最初の \cite を書いたら、下の行のコメントを外す。
+% （引用が1つも無い状態で有効にすると upbibtex がエラーを出す）
+%\bibliography{cite}
+
+\end{document}
