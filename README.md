@@ -9,6 +9,7 @@
 - upLaTeX / LuaLaTeX / XeLaTeX / pdfLaTeX に対応（原稿ごとに自動で切り替わります）
 - 保存するたびに自動で組版され、PDF が横で更新されます
 - GitHub にタグを打つと、PDF が自動生成されて保管されます
+- **ブラウザだけでも書けます**（GitHub Codespaces。何もインストールしていない PC でも可）
 - Claude Code（AI アシスタント）が最初から使えます
 
 English version: [README.en.md](README.en.md)
@@ -75,6 +76,66 @@ VSCode が開いたら `Ctrl+Shift+P` を押し、**`Dev Containers: Reopen in C
 初回は組版環境のダウンロードに5〜10分かかります。2回目以降は数十秒です。
 
 左下の表示が `Dev Container: ...` に変われば成功。`main.tex` を開いて `Ctrl+Alt+B` でビルドできます。
+
+### ブラウザで開く（インストール不要）
+
+GitHub の **Codespaces** を使うと、ブラウザの中に同じ環境が立ち上がります。
+**Git も Docker も VSCode も要りません。** GitHub のアカウントだけで書けます。
+大学の共用PCや、管理者権限の無いPCからでも使えます。
+
+開き方：リポジトリのページで緑の **Code** → **Codespaces** タブ → **Create codespace on main**。
+
+初回は環境の組み立てに5〜10分かかります。一度作った codespace は、止めて再開すれば数十秒で開きます。
+ビルド、PDF のプレビュー、保存時の自動更新、Claude Code まで、手元と同じように動きます。
+
+**必ず守ること：ブラウザを閉じる前に push する。**
+
+```bash
+git add -A
+git commit -m "..."
+git push
+```
+
+codespace の中で書いたものは、push するまで codespace の中にしかありません。
+止める（Stop）だけなら残りますが、削除（Delete）すると消えます。
+止めたまま長く使わずにいると、GitHub が自動で削除します。
+
+| 操作 | 方法 |
+|---|---|
+| 一覧・停止・削除 | <https://github.com/codespaces> で各行の「…」 |
+| いま開いているものを止める | `Ctrl+Shift+P` → `Codespaces: Stop Current Codespace` |
+
+**無料枠**：個人アカウントには毎月 120 コア時間（2コアなら60時間）と 15GB のストレージが付いています。
+何も操作しないと30分ほどで自動で止まるので、計算時間が減り続けることはありません。
+ただし止めていてもストレージは使うので、使い終わった codespace は削除してください。
+研究室の組織アカウントが持つリポジトリには、この無料枠は付きません。
+
+**手元との違い**：`_inbox/` の中身と、まだ push していないファイルはありません。
+Claude Code は codespace ごとにログインが要ります。ビルドは手元より少し遅めです。
+
+### PCに何も入れずに、ブラウザで使う（Codespaces）
+
+Docker を入れられないPCや、出先のPCからでも、ブラウザだけで同じ環境が使えます。
+
+GitHub で自分の原稿のリポジトリを開き、緑の **Code** → **Codespaces** タブ →
+**Create codespace on main**。ブラウザの中に VSCode が開き、手元と同じ組版環境が立ち上がります。
+初回の起動には数分かかります。
+
+**無料で使えるのは、月に60時間ぶんの起動時間**です（個人アカウントの無料枠）。
+ビルドの時間ではなく、codespace を開いている時間すべてが数えられます。
+
+- 平日に毎日2時間書く程度なら収まります。毎日のメインの環境にするには足りません
+- 操作しないまま30分経つと自動で止まり、止まっている間は時間を消費しません
+- **使い終わった codespace は削除してください。** 止めていても保存領域を使い続け、無料枠を減らします
+  （GitHub の Code → Codespaces タブ、または https://github.com/codespaces から削除できます）
+- 残量は GitHub の Settings → Billing で確認できます
+
+注意点:
+
+- 2コアのマシンなので、ビルドは手元より遅くなります
+- Claude Code は codespace ごとに `claude` でログインし直す必要があります
+- **研究室の GitHub 組織（Organization）に置いたリポジトリには、無料枠がありません。**
+  無料枠は個人アカウントにだけ付きます
 
 ---
 

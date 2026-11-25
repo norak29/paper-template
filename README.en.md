@@ -11,6 +11,7 @@ so a project made from this template builds identically on any machine.
 - Saving rebuilds the document; the PDF next to your source updates automatically
 - Pushing a git tag builds the PDF on GitHub and stores it
 - Claude Code (AI assistant) is available from the start
+- **You can also write entirely in the browser** (GitHub Codespaces), from a machine with nothing installed
 
 日本語版: [README.md](README.md)
 
@@ -80,6 +81,68 @@ After that it takes seconds.
 
 When the bottom left shows `Dev Container: ...`, you are inside. Open `main.tex`
 and press `Ctrl+Alt+B` to build.
+
+### Opening it in the browser (nothing to install)
+
+With GitHub **Codespaces**, the same environment starts inside your browser.
+**No Git, Docker or VS Code needed** — just a GitHub account.
+It works from a shared university PC or a machine where you have no admin rights.
+
+To open: on the repository page, green **Code** → **Codespaces** tab → **Create codespace on main**.
+
+The first time, building the environment takes 5–10 minutes. Stopping and resuming an existing
+codespace takes seconds. Building, PDF preview, auto-refresh on save and Claude Code all work just
+as they do locally.
+
+**The one rule: push before you close the browser.**
+
+```bash
+git add -A
+git commit -m "..."
+git push
+```
+
+Anything you write in a codespace exists only there until you push it. Stopping keeps it;
+deleting loses it. A stopped codespace that goes unused for a long time is deleted by GitHub
+automatically.
+
+| Action | How |
+|---|---|
+| List, stop, delete | <https://github.com/codespaces>, then "…" on the row |
+| Stop the one you have open | `Ctrl+Shift+P` → `Codespaces: Stop Current Codespace` |
+
+**Free allowance**: personal accounts get 120 core-hours (60 hours on a 2-core machine) and 15 GB of
+storage each month. An idle codespace stops itself after about 30 minutes, so compute time does not
+keep draining. Storage is still counted while stopped, so delete codespaces you are done with.
+Repositories owned by an organization account do not get this free allowance.
+
+**Differences from working locally**: the contents of `_inbox/` and anything you have not pushed are
+not there. Claude Code needs a separate sign-in in each codespace. Builds are a little slower.
+
+### In the browser, with nothing installed (Codespaces)
+
+On a machine where you cannot install Docker, or when you are away from your own computer,
+you can use the same environment entirely in the browser.
+
+Open your paper's repository on GitHub and choose the green **Code** button → **Codespaces** tab →
+**Create codespace on main**. VS Code opens in the browser with the same typesetting environment
+you have locally. The first start takes a few minutes.
+
+**The free allowance is about 60 hours of running time per month** (personal accounts).
+What counts is the time the codespace is open, not the time spent building.
+
+- Writing two hours every weekday fits. It is not enough to be your main daily environment
+- After 30 minutes without activity the codespace stops by itself, and a stopped codespace uses no time
+- **Delete codespaces you no longer need.** Even stopped, they keep using storage and eat into the
+  free allowance (delete them from the Code → Codespaces tab or at https://github.com/codespaces)
+- Check what is left under GitHub Settings → Billing
+
+Things to know:
+
+- It runs on a 2-core machine, so builds are slower than on your own PC
+- Claude Code needs a fresh `claude` login in each codespace
+- **Repositories owned by a GitHub organization (such as a lab org) get no free allowance.**
+  The free allowance belongs to personal accounts only
 
 ---
 
