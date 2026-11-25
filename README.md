@@ -10,6 +10,8 @@
 - GitHub にタグを打つと、PDF が自動生成されて保管されます
 - Claude Code（AI アシスタント）が最初から使えます
 
+English version: [README.en.md](README.en.md)
+
 ---
 
 ## 1. 最初の一度だけ：PCの準備
@@ -109,22 +111,75 @@ VSCode が開いたら `Ctrl+Shift+P` を押し、**`Dev Containers: Reopen in C
 
 ## 4. 学会のスタイルファイルを入れる
 
-学会から配布された `.sty` や `.cls` を **`sty/` フォルダ**に置いてください。
-`main.tex` から `\usepackage{ファイル名}` で読めるように設定済みです。
+学会から配布されたファイルを **`sty/` フォルダ**に置いてください。
+検索パスを通してあるので、`main.tex` から読めます。
+
+読み込み方はファイルの種類で違います。
+
+| 配布ファイル | 書き方 |
+|---|---|
+| `.sty` | `\usepackage{ファイル名}` |
+| `.cls` | `\documentclass[オプション]{ファイル名}` |
+| `.bst` | `\bibliographystyle{ファイル名}` |
 
 ### 組版エンジンの指定
 
-多くの学会テンプレートは upLaTeX ですが、最近は LuaLaTeX のものもあります。
-`main.tex` の**1行目**に書けば切り替わります。
+学会によって使うエンジンが違います。`main.tex` の**1行目**に書けば切り替わります。
 
 ```latex
-% !TEX engine = lualatex
+% !TEX engine = pdflatex
 ```
 
-使える値は `uplatex`（既定）、`platex`、`lualatex`、`xelatex`、`pdflatex`。
+| 指定 | 主な用途 |
+|---|---|
+| `uplatex`（既定） | 従来の日本語学会テンプレート（jsarticle 系） |
+| `platex` | 古い日本語テンプレート |
+| `lualatex` | 最近の日本語テンプレート（jlreq + luatexja 系） |
+| `pdflatex` | **英文テンプレート（IEEEtran, acmart, elsarticle など）** |
+| `xelatex` | XeLaTeX 指定のテンプレート |
 
-書かなくても、`main.tex` の冒頭に `jlreq` や `luatexja` があれば自動で LuaLaTeX と判定します。
-ビルド時にターミナルへ `latexmkrc: engine = ...` と出るので、判定結果を確認できます。
+書かなくても、`main.tex` の冒頭から自動で判定します。`jlreq` や `luatexja` があれば LuaLaTeX、
+`IEEEtran` などがあれば pdfLaTeX。ビルド時にターミナルへ `latexmkrc: engine = ...` と出るので、
+判定結果を確認できます。**迷ったら明示的に書いてください。**
+
+### 国際会議・論文誌（IEEE など）
+
+英文テンプレートもそのまま使えます。**IEEEtran、acmart、elsarticle、revtex は組版環境に
+最初から入っています。**
+
+学会が配布する zip に `.cls` が同梱されている場合は、それを `sty/` に置いてください。
+**学会が配った版が TeX Live 側より優先されます。** 指定された版で組むのが正しいので、これが狙いです。
+
+```latex
+% !TEX engine = pdflatex
+\documentclass[conference]{IEEEtran}
+```
+
+IEEE の投稿システムは PDF にフォントが全部埋め込まれていることを要求しますが
+（PDF eXpress のチェック）、pdfLaTeX の出力は既定で埋め込むので問題ありません。
+
+### Word のテンプレートしか配布されていない場合
+
+**LaTeX で再現しようとしないでください。** 書式が一致せず機械的に弾かれることがあります。
+その学会は Word で書きます。
+
+ただしリポジトリは使えます。`.docx` を git で版管理でき、タグを打てば提出版が Releases に残ります。
+コンテナに `pandoc` が入っているので、次の設定を入れると **Word ファイルの中身の差分が
+`git diff` で読めるようになります。**
+
+`.gitattributes` に1行:
+
+```
+*.docx diff=word
+```
+
+コンテナで1回だけ:
+
+```bash
+git config diff.word.textconv "pandoc -t markdown --wrap=none"
+```
+
+共著者から戻ってきた版と自分の版を比べるときに効きます。
 
 ---
 

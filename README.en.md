@@ -1,0 +1,362 @@
+# paper-template
+
+A template for writing conference papers and journal articles in LaTeX.
+
+**You do not need to install TeX Live.** The typesetting environment ships as a container,
+so a project made from this template builds identically on any machine.
+
+- Works with upLaTeX, LuaLaTeX, XeLaTeX and pdfLaTeX — the engine switches per paper
+- Saving rebuilds the document; the PDF next to your source updates automatically
+- Pushing a git tag builds the PDF on GitHub and stores it
+- Claude Code (AI assistant) is available from the start
+
+日本語版: [README.md](README.md)
+
+---
+
+## 1. One-time setup on your machine
+
+Open PowerShell and install four things.
+
+```powershell
+winget install --id Git.Git -e
+winget install --id Docker.DockerDesktop -e
+winget install --id Microsoft.VisualStudioCode -e
+winget install --id GitHub.cli -e
+```
+
+**Restart your PC afterwards.** Docker Desktop needs this to enable WSL2.
+
+After the restart, **launch Docker Desktop** and wait until the bottom left reads
+`Engine running` (green). To avoid starting it by hand every time, turn on
+Settings → General → `Start Docker Desktop when you sign in`.
+
+Finally, open VS Code, go to the Extensions tab (`Ctrl+Shift+X`), search for
+**Dev Containers** (publisher: Microsoft, id `ms-vscode-remote.remote-containers`) and install it.
+
+### Set your name and email
+
+In a new PowerShell window, once:
+
+```powershell
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+git config --global core.autocrlf input
+git config --global init.defaultBranch main
+gh auth login
+```
+
+For `gh auth login`, choose GitHub.com → HTTPS → authenticate in browser.
+
+Your email address appears in commits on public repositories. To keep it private, enable
+Settings → Emails → `Keep my email addresses private` on GitHub and use the
+`12345678+username@users.noreply.github.com` address shown there.
+
+---
+
+## 2. Start a new paper
+
+```powershell
+cd C:\research
+gh repo create your-paper-name --template norak29/paper-template --private --clone
+cd your-paper-name
+code .
+```
+
+If you prefer the browser, use the green **Use this template** button on this repository.
+
+**Where to put it**: avoid OneDrive folders and paths containing spaces or non-ASCII
+characters. Something like `C:\research\myproject` is safe.
+
+### Open it in the container
+
+Once VS Code opens, press `Ctrl+Shift+P`, type
+**`Dev Containers: Reopen in Container`** and run it.
+
+The first time, downloading the typesetting environment takes 5–10 minutes.
+After that it takes seconds.
+
+When the bottom left shows `Dev Container: ...`, you are inside. Open `main.tex`
+and press `Ctrl+Alt+B` to build.
+
+---
+
+## 3. Writing
+
+### Show the PDF side by side
+
+With `main.tex` open, **double-click `main.pdf` inside the `out` folder** in the explorer.
+Drag that tab to the right half, and you get source on the left, PDF on the right.
+
+From then on, **every `Ctrl+S` rebuilds and refreshes the PDF.**
+
+| Action | Key |
+|---|---|
+| Build | `Ctrl+Alt+B` |
+| Jump from source to the matching spot in the PDF | `Ctrl+Alt+J` |
+| Jump from the PDF back to the source | `Ctrl+click` in the PDF |
+| Clean auxiliary files | `Ctrl+Alt+C` |
+
+Errors appear in the **Problems panel** (`Ctrl+Shift+M`) with line numbers.
+
+### One sentence per line
+
+Please follow this one rule.
+
+```latex
+Write the first sentence here.
+Start the second sentence on the next line.
+```
+
+If you write a whole paragraph on one line, changing a single word is recorded as a change
+to the entire paragraph, and you lose the ability to see what you actually edited.
+
+---
+
+## 4. Adding a conference style file
+
+Put the files supplied by the conference into the **`sty/` folder**.
+They are on the search path, so `main.tex` can load them.
+
+How you load one depends on its type.
+
+| File | How to load it |
+|---|---|
+| `.sty` | `\usepackage{filename}` |
+| `.cls` | `\documentclass[options]{filename}` |
+| `.bst` | `\bibliographystyle{filename}` |
+
+### Choosing the engine
+
+Different conferences expect different engines. Put this on the **first line** of `main.tex`:
+
+```latex
+% !TEX engine = pdflatex
+```
+
+| Value | Typical use |
+|---|---|
+| `uplatex` (default) | Traditional Japanese templates (jsarticle family) |
+| `platex` | Older Japanese templates |
+| `lualatex` | Recent Japanese templates (jlreq + luatexja) |
+| `pdflatex` | **English templates (IEEEtran, acmart, elsarticle, …)** |
+| `xelatex` | Templates that require XeLaTeX |
+
+Without this line the engine is detected from the top of `main.tex`: `jlreq` or `luatexja`
+selects LuaLaTeX, `IEEEtran` and friends select pdfLaTeX. The build prints
+`latexmkrc: engine = ...` so you can confirm. **When in doubt, state it explicitly.**
+
+### International conferences and journals (IEEE and others)
+
+English templates work as they are. **IEEEtran, acmart, elsarticle and revtex are already
+part of the typesetting environment.**
+
+If the conference ships its own `.cls` in a zip, put that file in `sty/`.
+**The conference's copy takes precedence over the one in TeX Live**, which is what you want:
+you should typeset with the version they specified.
+
+```latex
+% !TEX engine = pdflatex
+\documentclass[conference]{IEEEtran}
+```
+
+IEEE submission systems require every font to be embedded in the PDF (the PDF eXpress check).
+pdfLaTeX embeds them by default, so this is not a problem.
+
+### When only a Word template is provided
+
+**Do not try to reproduce it in LaTeX.** A mismatch in formatting can get the paper rejected
+automatically. Write that one in Word.
+
+The repository is still useful. You can version a `.docx` with git, and tagging still freezes
+the submitted version under Releases. `pandoc` is available in the container, so with the
+setting below **`git diff` shows the actual text differences inside Word files.**
+
+Add to `.gitattributes`:
+
+```
+*.docx diff=word
+```
+
+Then once, in the container:
+
+```bash
+git config diff.word.textconv "pandoc -t markdown --wrap=none"
+```
+
+Useful when comparing your version against one a co-author sent back.
+
+---
+
+## 5. Saving your work (Git)
+
+Record what you wrote.
+
+1. Open **Source Control** (`Ctrl+Shift+G`) in the sidebar
+2. Press **`+`** next to the files you want to record (staging)
+3. Type a message in the box and press **`Ctrl+Enter`**
+4. Press **Sync Changes** to send it to GitHub
+
+Write specific messages such as "Add formulation to Section 2". You will thank yourself later.
+
+### From the terminal
+
+The same thing from the terminal (`` Ctrl+` ``), which is faster once you are used to it.
+
+```bash
+git status            # see what changed
+git add -A            # stage everything (or: git add main.tex)
+git commit -m "Add formulation to Section 2"
+git push              # send it to GitHub
+```
+
+`git add` and `git commit` are local; nothing reaches GitHub until `git push`.
+It is fine to make several commits and push them together later.
+
+```bash
+git diff              # changes not staged yet
+git log --oneline     # list of commits
+```
+
+### Going back to an earlier version
+
+```bash
+git log --oneline                        # find the commit to go back to
+git restore --source=<ID> main.tex       # restore that version of the file
+```
+
+Nothing is deleted from the history. The fact that you reverted is recorded as well.
+
+### Freezing a submitted version
+
+Tag only the versions worth keeping — what you submitted, what you handed to your advisor.
+Ordinary writing needs commits only.
+
+```bash
+git push                                  # send the content first
+git tag -a v1.0 -m "Submitted to XXX"     # create an annotated tag
+git push --tags                           # send the tag
+```
+
+**`git push` and `git push --tags` are different.** The first sends commits, the second
+sends tags. Push the content first so the tag never points at something GitHub does not have.
+
+Pushing a tag triggers a build on GitHub. A few minutes later, `main.pdf` is attached to
+the matching entry under **Releases**, along with an automatic archive of the source
+(zip / tar.gz) at that point. Anyone who does not use git can simply download that zip.
+Files excluded by `.gitignore` (`out/`, `_inbox/`) are not included.
+
+```bash
+git tag                                   # list your tags
+```
+
+To remove a tag you named wrongly, delete it in both places:
+
+```bash
+git tag -d v1.0                           # locally
+git push origin :refs/tags/v1.0           # on GitHub
+```
+
+---
+
+## 6. Claude Code
+
+Type `claude` in the container terminal, or use the **Claude Code** tab in VS Code.
+
+Useful for paper work:
+
+- Formatting `cite.bib`, turning reference details into BibTeX entries
+- Turning numbers into LaTeX tables
+- Proofreading ("point out sentences where subject and verb do not agree")
+- Reading build logs and explaining errors
+- Renaming figures and updating every `\includegraphics` accordingly
+
+`CLAUDE.md` describes the conventions of this project and Claude Code reads it automatically.
+Add anything specific to your paper there and the answers get better.
+
+**Requires a Pro plan or above.** Usage is shared with Claude chat.
+
+---
+
+## 7. Scratch folder
+
+`_inbox/` is for throwaway files — zips, notes, anything you do not want in the repository.
+It is excluded from git, so nothing there is ever committed.
+
+A typical use: drop a zip sent by the conference there and ask Claude Code to
+"extract this and sort the files into `sty/` and `fig/`".
+
+---
+
+## 8. When a package is missing
+
+### In a hurry (seconds)
+
+Add one line to `.devcontainer/Dockerfile` and run `Dev Containers: Rebuild Container`.
+
+```dockerfile
+RUN tlmgr install package-name
+```
+
+### Permanently
+
+Edit `texlive.profile` in [texlive-ja](https://github.com/norak29/texlive-ja) and push;
+a new environment is built automatically. Then update two places in this project to the
+new date tag:
+
+```
+.devcontainer/Dockerfile       the FROM line
+.github/workflows/release.yml  the container: line
+```
+
+**These two must match.** If they differ, your local build works but CI fails.
+
+---
+
+## 9. Troubleshooting
+
+| Symptom | What to do |
+|---|---|
+| No `Reopen in Container` command | The Dev Containers extension is not installed |
+| A Docker error when opening | Docker Desktop is not running — check the whale is green |
+| Still fails to open | Run `wsl --update` in PowerShell, then restart the PC |
+| "`.devcontainer` not found" | You opened a parent folder; open the project folder itself |
+| `EACCES` or "file is newer" when saving | `Ctrl+Shift+P` → `Developer: Reload Window` |
+| References show as `[?]` | `cite.bib` is empty. Fill it, then `Ctrl+Alt+C` and rebuild |
+| The PDF does not update | `Ctrl+Alt+C` to clean, then rebuild |
+| Photo colours look washed out | Convert to sRGB: `convert in.jpg -colorspace sRGB -strip out.jpg` |
+| Only CI fails | The two tags above do not match |
+
+---
+
+## 10. How it works (you do not need this to use it)
+
+Three repositories work together.
+
+```
+texlive-ja          Recipe for the TeX environment. Touched a few times a year
+   │ built automatically by GitHub Actions
+   ▼
+ghcr.io/norak29/texlive-ja:2026.11.24     environment frozen under a date tag
+   │ referenced by that exact tag
+   ▼
+paper-template      this repository — the skeleton of a paper
+   │ Use this template
+   ▼
+your paper          what you touch every day
+```
+
+Because the environment is pinned to a date tag, **the output does not change when you
+reopen the project months later for revisions.** TeX Live is updated continuously and the
+same source can otherwise produce different output.
+
+| File | Purpose |
+|---|---|
+| `.latexmkrc` | Engine selection and the search path for `sty/` |
+| `.devcontainer/` | Which environment to use, and VS Code settings |
+| `.github/workflows/` | Builds the PDF when you push a tag |
+| `CLAUDE.md` | Project conventions, read by Claude Code |
+| `sty/` | Conference style files |
+| `fig/` | Figures |
+| `cite.bib` | References |
+| `_inbox/` | Scratch space (not tracked by git) |
