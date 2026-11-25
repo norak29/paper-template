@@ -150,6 +150,9 @@ level that contains `\documentclass` is treated as the main file automatically. 
 main file at the top level.** Chapter files in a subfolder, or with a `% !TEX root` line, are never
 mistaken for it.
 
+**Per-chapter bibliographies** (the `bibunits` package) work as they are. latexmk runs bibtex on
+each chapter automatically; no extra configuration is needed.
+
 ---
 
 ## 4. Adding a conference style file
@@ -385,6 +388,24 @@ new date tag:
 | The PDF does not update | `Ctrl+Alt+C` to clean, then rebuild |
 | Photo colours look washed out | Convert to sRGB: `convert in.jpg -colorspace sRGB -strip out.jpg` |
 | Only CI fails | The two tags above do not match |
+| An older paper stops with `Command \xxx already defined` | See "Inheriting an older paper" below |
+
+### Inheriting an older paper
+
+When you build a paper written with a TeX Live from several years ago — a senior student's thesis,
+say — it may stop with `LaTeX Error: Command \xxx already defined`.
+
+The paper is not wrong. **A command it defined for itself has since been added to TeX Live as a
+standard command**, and the names collide. Add one line just before the definition
+(`\newcommand{\xxx}`) and the paper's own definition wins, so it builds as before.
+
+```latex
+\let\xxx\relax
+\newcommand{\xxx}{...}
+```
+
+This template pins the environment to a fixed version, so **papers written with it will not run
+into this problem later.** That is exactly why the version is pinned.
 
 ---
 
