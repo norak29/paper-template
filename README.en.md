@@ -128,6 +128,26 @@ How you load one depends on its type.
 | `.cls` | `\documentclass[options]{filename}` |
 | `.bst` | `\bibliographystyle{filename}` |
 
+### A note on character encoding
+
+This repository assumes UTF-8. Files distributed by Japanese conferences are sometimes
+encoded in Shift_JIS or EUC-JP, and using them as they are produces garbled text and a
+build that fails for reasons the error messages do not explain.
+
+- If the package contains separate `UTF` / `SJIS` / `EUC` folders → **use the one in `UTF`**
+- If only a Shift_JIS file is provided → convert it inside the container
+
+```bash
+iconv -f CP932 -t UTF-8 their-file.sty > sty/their-file.sty
+```
+
+The bottom right of VS Code shows the encoding of the open file. `UTF-8` means you are fine;
+`Shift JIS` means it needs converting.
+
+Be careful when extracting zips as well. If figure filenames were stored in Shift_JIS, they
+come out garbled when extracted inside the container. Extract such a zip in Windows Explorer,
+or use `unzip -O cp932`.
+
 ### Choosing the engine
 
 Different conferences expect different engines. Put this on the **first line** of `main.tex`:
