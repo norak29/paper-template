@@ -5,3 +5,5 @@
 *.png binary
 *.jpg binary
 *.pdf binary
+# Word 文書は pandoc で文章に変換してから差分を取る（設定は devcontainer.json）
+*.docx -text diff=word

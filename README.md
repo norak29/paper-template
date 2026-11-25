@@ -222,22 +222,19 @@ IEEE の投稿システムは PDF にフォントが全部埋め込まれてい�
 その学会は Word で書きます。
 
 ただしリポジトリは使えます。`.docx` を git で版管理でき、タグを打てば提出版が Releases に残ります。
-コンテナに `pandoc` が入っているので、次の設定を入れると **Word ファイルの中身の差分が
-`git diff` で読めるようになります。**
 
-`.gitattributes` に1行:
+さらに、**コンテナの中では Word ファイルの差分が文章で読めます。** 設定は最初から入っているので、
+何もしなくて構いません。ソース管理パネルで `.docx` をクリックするか、`git diff` を実行すると、
+どの文をどう直したかが行単位で表示されます。
 
 ```
-*.docx diff=word
-```
-
-コンテナで1回だけ:
-
-```bash
-git config diff.word.textconv "pandoc -t markdown --wrap=none"
+-FRA is used to detect deformation.
++FRA is widely used to detect mechanical deformation.
 ```
 
 共著者から戻ってきた版と自分の版を比べるときに効きます。
+pandoc がコンテナの中にしか無いため、Windows 側の git や GitHub のサイト上では、
+これまでどおり「バイナリが変わった」とだけ表示されます。
 
 ---
 

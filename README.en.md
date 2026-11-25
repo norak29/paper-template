@@ -231,22 +231,20 @@ pdfLaTeX embeds them by default, so this is not a problem.
 automatically. Write that one in Word.
 
 The repository is still useful. You can version a `.docx` with git, and tagging still freezes
-the submitted version under Releases. `pandoc` is available in the container, so with the
-setting below **`git diff` shows the actual text differences inside Word files.**
+the submitted version under Releases.
 
-Add to `.gitattributes`:
+On top of that, **inside the container you can read the differences in Word files as text.**
+This is set up already; there is nothing to do. Click a `.docx` in the Source Control panel or run
+`git diff`, and you see which sentences changed, line by line.
 
 ```
-*.docx diff=word
-```
-
-Then once, in the container:
-
-```bash
-git config diff.word.textconv "pandoc -t markdown --wrap=none"
+-FRA is used to detect deformation.
++FRA is widely used to detect mechanical deformation.
 ```
 
 Useful when comparing your version against one a co-author sent back.
+Because pandoc lives only inside the container, Windows-side git and the GitHub website still show
+just "binary file changed".
 
 ---
 
