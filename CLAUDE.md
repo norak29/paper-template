@@ -29,3 +29,9 @@
 5. `latexmk -outdir=out` で組み、最初のエラーから1つずつ直す
 6. `Command \xxx already defined` は TeX Live の年版差。定義の直前に `\let\xxx\relax` を足す
 7. 本文・数値・図は変えない。直すのは組むために必要な最小限だけにし、直した箇所はすべて報告する
+
+## PDF を読むとき
+- 本文は `pdftotext` で取り出す。表は `pdftotext -layout`
+- **数式は pdftotext の結果を信用しない。** 記号がばらばらになる。
+  数式のあるページは `pdftoppm -r 150 -png` で画像にしてから読む
+- 元の .docx があるなら `pandoc 元.docx -t latex` で数式ごと変換する。これが一番正確
