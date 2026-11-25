@@ -113,6 +113,43 @@ Start the second sentence on the next line.
 If you write a whole paragraph on one line, changing a single word is recorded as a change
 to the entire paragraph, and you lose the ability to see what you actually edited.
 
+### Splitting a long document (theses and the like)
+
+To keep each chapter in its own file, make a folder and pull the chapters in with `\input`.
+
+```
+main.tex
+chapters/
+├── 01_intro.tex
+├── 02_method.tex
+└── 03_result.tex
+```
+
+```latex
+% main.tex
+\begin{document}
+\input{chapters/01_intro}
+\input{chapters/02_method}
+\input{chapters/03_result}
+\end{document}
+```
+
+**Put the location of the main file on the first line of every chapter file.**
+
+```latex
+% !TEX root = ../main.tex
+\section{Introduction}
+```
+
+Without it, pressing `Ctrl+Alt+B` while a chapter is open tries to build that chapter on its own
+and fails. With it, the whole of `main.tex` is built whichever chapter you are in, and jumping
+between source and PDF (`Ctrl+Alt+J`) works correctly.
+
+The main file does not have to be called `main.tex` (`thesis.tex` is fine). The file at the top
+level that contains `\documentclass` is treated as the main file automatically. **Keep only one
+main file at the top level.** Chapter files in a subfolder, or with a `% !TEX root` line, are never
+mistaken for it.
+
 ---
 
 ## 4. Adding a conference style file

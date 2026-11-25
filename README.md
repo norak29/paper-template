@@ -108,6 +108,42 @@ VSCode が開いたら `Ctrl+Shift+P` を押し、**`Dev Containers: Reopen in C
 段落を1行で書くと、単語1つの修正が段落全体の変更として記録され、
 あとから「どこを直したか」が追えなくなります。
 
+### 長い文書を分割する（学位論文など）
+
+章ごとにファイルを分けるときは、フォルダを作って `\input` で読み込みます。
+
+```
+main.tex
+chapters/
+├── 01_intro.tex
+├── 02_method.tex
+└── 03_result.tex
+```
+
+```latex
+% main.tex
+\begin{document}
+\input{chapters/01_intro}
+\input{chapters/02_method}
+\input{chapters/03_result}
+\end{document}
+```
+
+**各章ファイルの1行目に、メインファイルの場所を書いてください。**
+
+```latex
+% !TEX root = ../main.tex
+\section{はじめに}
+```
+
+これが無いと、章ファイルを開いた状態で `Ctrl+Alt+B` を押したときに、章ファイル単体を組もうとして失敗します。
+書いておけば、どの章を開いていても `main.tex` 全体が組まれ、PDF との行き来（`Ctrl+Alt+J`）も正しく動きます。
+
+メインファイルの名前は `main.tex` でなくても構いません（`thesis.tex` など）。
+直下にある、`\documentclass` を含むファイルが自動でメインとして扱われます。
+ただし**直下にメインファイルは1つだけ**にしてください。章ファイルはフォルダに入れるか、
+`% !TEX root` を書いておけばメインと間違われません。
+
 ---
 
 ## 4. 学会のスタイルファイルを入れる

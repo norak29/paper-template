@@ -1,7 +1,7 @@
 name: release-pdf
 
 # v で始まるタグを push すると PDF をビルドして Release に添付する
-#   git tag -a v1.0 -m "電気学会 投稿版"
+#   git tag -a v1.0 -m "投稿版"
 #   git push --tags
 on:
   push:
@@ -14,22 +14,23 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-    # ★ .devcontainer/Dockerfile と同じイメージ・同じタグにすること（ここがずれると CI だけ落ちる）
+    # ★ .devcontainer/Dockerfile と同じイメージ・同じタグにすること（ずれると CI だけ落ちる）
     container: ghcr.io/norak29/texlive-ja:2026.11.24
     steps:
       - uses: actions/checkout@v4
 
+      # ファイル名は書かない。.latexmkrc がメインファイルとエンジンを自動で決める
       - name: Build
-        run: latexmk -outdir=out main.tex
+        run: latexmk -outdir=out
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: main-pdf
-          path: out/main.pdf
+          name: pdf
+          path: out/*.pdf
 
       - name: Attach to release
         if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: out/main.pdf
+          files: out/*.pdf
