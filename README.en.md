@@ -1,6 +1,8 @@
 # paper-template
 
 A template for writing conference papers and journal articles in LaTeX.
+Works with Japanese conference templates (jsarticle, jlreq) and with international ones
+such as IEEE, ACM and Elsevier.
 
 **You do not need to install TeX Live.** The typesetting environment ships as a container,
 so a project made from this template builds identically on any machine.
