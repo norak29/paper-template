@@ -33,6 +33,8 @@ if (open(my $fh, '<', 'main.tex')) {
         $engine = 'lualatex';
     } elsif ($head =~ /xelatex|zxjatype/i) {
         $engine = 'xelatex';
+    } elsif ($head =~ /IEEEtran|IEEEconf|acmart|elsarticle|revtex/i) {
+        $engine = 'pdflatex';
     }
 }
 $engine = 'uplatex' unless $engine;
